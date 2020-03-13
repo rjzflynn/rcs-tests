@@ -1,0 +1,14 @@
+{
+    "server": "hub-cloud.browserstack.com",
+    "user": "richardflynn1",
+    "key": "yTPovdruEsYew5eB8qoT",
+  
+    "capabilities": {
+      "name": "Bstack-[Junit] Sample Test",
+      "browserstack.debug": true
+    },
+  
+    "environments": [{
+      "browser": "chrome"
+    }]
+  }
