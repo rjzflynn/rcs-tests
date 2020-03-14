@@ -45,12 +45,12 @@ public class HomePageTests_Cloud {
 		return taskIDs;
 	}
 
-	private static DesiredCapabilities capabilities;
+	private DesiredCapabilities capabilities;
 	private WebDriver driver;
 	private RentalcarScannerHomePage homePage;
 
 	@BeforeClass
-	public static void standUpTests() throws Exception {
+	public static void setupConfig() throws Exception {
 		JSONParser parser = new JSONParser();
 		config = (JSONObject) parser.parse(new FileReader("src/test/resources/conf.json"));
 	}
@@ -58,8 +58,7 @@ public class HomePageTests_Cloud {
 	
 	@Before
 	public void setUp() throws MalformedURLException {
-		capabilities = new DesiredCapabilities();
-		
+		capabilities = new DesiredCapabilities();	
 		JSONArray envs = (JSONArray) config.get("environments");
 		Map<String, String> envCapabilities = (Map<String, String>) envs.get(taskID);
 		Iterator it = envCapabilities.entrySet().iterator();
@@ -79,7 +78,6 @@ public class HomePageTests_Cloud {
 		String username = (String) config.get("user");
 		String accessKey = (String) config.get("key");
 
-	
 		driver = new RemoteWebDriver(
 				new URL("http://" + username + ":" + accessKey + "@" + config.get("server") + "/wd/hub"), capabilities);
 		homePage = new RentalcarScannerHomePage(driver);
