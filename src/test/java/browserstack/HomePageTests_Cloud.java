@@ -1,34 +1,54 @@
 package browserstack;
 
-import java.io.FileNotFoundException;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.FileReader;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized.Parameter;
+import org.junit.runners.Parameterized.Parameters;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-
-import com.browserstack.local.Local;
-
-import static org.junit.Assert.*;
 import framework.pageObjects.RentalcarScannerHomePage;
 
+@RunWith(Parallelized.class)
 public class HomePageTests_Cloud {
 
 	private static JSONObject config;
+
+	@Parameter(value = 0)
+	public static int taskID;
+
+	@Parameters
+	public static Iterable<? extends Object> data() throws Exception {
+		System.out.println("data");
+		JSONParser parser = new JSONParser();
+		config = (JSONObject) parser.parse(new FileReader("src/test/resources/single.conf.json"));
+		int envs = ((JSONArray) config.get("environments")).size();
+
+		List<Integer> taskIDs = new ArrayList<Integer>();
+		for (int i = 0; i < envs; i++) {
+			taskIDs.add(i);
+		}
+
+		return taskIDs;
+	}
 
 	private static String username;
 	private static String accessKey;
@@ -41,20 +61,36 @@ public class HomePageTests_Cloud {
 	public static void standUpTests() throws Exception {
 		JSONParser parser = new JSONParser();
 		config = (JSONObject) parser.parse(new FileReader("src/test/resources/single.conf.json"));
-		username = (String) config.get("user");
-		accessKey = (String) config.get("key");
-		capabilities = new DesiredCapabilities();
-		capabilities.setCapability("browser", "Chrome");
-		capabilities.setCapability("browser_version", "80.0");
-		capabilities.setCapability("os", "Windows");
-		capabilities.setCapability("os_version", "10");
-		capabilities.setCapability("resolution", "1024x768");
-		capabilities.setCapability("name", "Bstack-[Java] Sample Test");
+
 		
+
 	}
 
+	
 	@Before
 	public void setUp() throws MalformedURLException {
+		capabilities = new DesiredCapabilities();
+		
+		JSONArray envs = (JSONArray) config.get("environments");
+		Map<String, String> envCapabilities = (Map<String, String>) envs.get(taskID);
+		Iterator it = envCapabilities.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry pair = (Map.Entry) it.next();
+			capabilities.setCapability(pair.getKey().toString(), pair.getValue().toString());
+		}
+		Map<String, String> commonCapabilities = (Map<String, String>) config.get("capabilities");
+		it = commonCapabilities.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry pair = (Map.Entry) it.next();
+			if (capabilities.getCapability(pair.getKey().toString()) == null) {
+				capabilities.setCapability(pair.getKey().toString(), pair.getValue().toString());
+			}
+		}
+
+		String username = (String) config.get("user");
+		String accessKey = (String) config.get("key");
+
+	
 		driver = new RemoteWebDriver(
 				new URL("http://" + username + ":" + accessKey + "@" + config.get("server") + "/wd/hub"), capabilities);
 		homePage = new RentalcarScannerHomePage(driver);
@@ -82,7 +118,6 @@ public class HomePageTests_Cloud {
 
 	@Test
 	public void metaDescription_Test() {
-
 		assertEquals("incorrect meta description", homePage.getMetaDescription(), PAGE_META_DESC);
 
 	}
