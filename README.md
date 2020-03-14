@@ -27,7 +27,7 @@ Passing tests on BS:  ![alt text](https://i.imgur.com/5ldzyNR.png "Logo Title Te
 - Descriptive test names
 - Page Object Design Pattern
 - Simple, readable test code
-- Tests are indepantand - no dependencies between tests
+- Tests are independent - no dependencies between tests
 
 ### The next things I would implement given time
 - Reporting plugin to generate test reports
