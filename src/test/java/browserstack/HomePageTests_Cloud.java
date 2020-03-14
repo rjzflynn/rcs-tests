@@ -2,16 +2,13 @@ package browserstack;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
 import java.io.FileReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -37,23 +34,18 @@ public class HomePageTests_Cloud {
 
 	@Parameters
 	public static Iterable<? extends Object> data() throws Exception {
-		System.out.println("data");
 		JSONParser parser = new JSONParser();
-		config = (JSONObject) parser.parse(new FileReader("src/test/resources/single.conf.json"));
+		config = (JSONObject) parser.parse(new FileReader("src/test/resources/conf.json"));
 		int envs = ((JSONArray) config.get("environments")).size();
 
 		List<Integer> taskIDs = new ArrayList<Integer>();
 		for (int i = 0; i < envs; i++) {
 			taskIDs.add(i);
 		}
-
 		return taskIDs;
 	}
 
-	private static String username;
-	private static String accessKey;
 	private static DesiredCapabilities capabilities;
-
 	private WebDriver driver;
 	private RentalcarScannerHomePage homePage;
 
@@ -61,9 +53,6 @@ public class HomePageTests_Cloud {
 	public static void standUpTests() throws Exception {
 		JSONParser parser = new JSONParser();
 		config = (JSONObject) parser.parse(new FileReader("src/test/resources/single.conf.json"));
-
-		
-
 	}
 
 	
