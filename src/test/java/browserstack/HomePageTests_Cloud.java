@@ -52,7 +52,7 @@ public class HomePageTests_Cloud {
 	@BeforeClass
 	public static void standUpTests() throws Exception {
 		JSONParser parser = new JSONParser();
-		config = (JSONObject) parser.parse(new FileReader("src/test/resources/single.conf.json"));
+		config = (JSONObject) parser.parse(new FileReader("src/test/resources/conf.json"));
 	}
 
 	
