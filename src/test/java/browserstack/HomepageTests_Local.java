@@ -11,7 +11,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import static org.junit.Assert.*;
 import framework.pageObjects.RentalcarScannerHomePage;
 
-public class HomepageTests {
+public class HomepageTests_Local {
 
 	private WebDriver driver;
 	private RentalcarScannerHomePage homePage;
