@@ -9,6 +9,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class RentalcarScannerHomePage extends PageObject {
 
+	private final String HOMEPAGE_URL = "http://rentalcar-scanner.com/";
+	private final By SEARCH_CARS_BTN = By.name("searchCarsFormBtn");
+
 	public RentalcarScannerHomePage(WebDriver driver) {
 		super();
 		this.driver = driver;
@@ -16,14 +19,15 @@ public class RentalcarScannerHomePage extends PageObject {
 
 	@Override
 	public RentalcarScannerHomePage go() {
-		driver.get("http://rentalcar-scanner.com/");
+		driver.get(HOMEPAGE_URL);
 		return this;
 	}
 
+	// TODO: handle timeoutException?
 	@Override
 	public RentalcarScannerHomePage andWaitForPageToLoad() {
 		WebDriverWait wait = new WebDriverWait(driver, 20);
-		wait.until(ExpectedConditions.elementToBeClickable(By.name("searchCarsFormBtn")));
+		wait.until(ExpectedConditions.elementToBeClickable(SEARCH_CARS_BTN));
 		return this;
 	}
 
@@ -32,7 +36,7 @@ public class RentalcarScannerHomePage extends PageObject {
 		WebElement element = null;
 		try {
 			element = (new WebDriverWait(driver, secondsWait))
-					.until(ExpectedConditions.elementToBeClickable(By.name("searchCarsFormBtn")));
+					.until(ExpectedConditions.elementToBeClickable(SEARCH_CARS_BTN));
 		} catch (TimeoutException e) {
 			System.out.println("searchCarsFormBtn not visible after " + secondsWait + "seconds");
 		}
