@@ -49,12 +49,6 @@ public class HomePageTests_Cloud {
 	private WebDriver driver;
 	private RentalcarScannerHomePage homePage;
 
-	@BeforeClass
-	public static void setupConfig() throws Exception {
-		JSONParser parser = new JSONParser();
-		config = (JSONObject) parser.parse(new FileReader("src/test/resources/conf.json"));
-	}
-
 	
 	@Before
 	public void setUp() throws MalformedURLException {
